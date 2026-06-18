@@ -1,0 +1,46 @@
+balance = 20000.0
+
+def check_balance():
+    print(f"\nYour Account Balance is: {balance}")
+
+def deposit():
+    global balance
+    amount = float(input("Enter amount to deposit: "))
+    balance = balance + amount
+    print(f"Successfully Deposited: {amount}")
+    print(f"Updated Balance: {balance}")
+
+def withdraw():
+    global balance
+    amount = float(input("Enter amount to withdraw: "))
+
+    if amount > balance:
+        print("Insufficient balance!")
+    else:
+        balance = balance - amount
+        print(f"Successfully Withdrawn: {amount}")
+        print(f"Updated Balance: {balance}")
+
+
+while True:
+
+    print("1. Check Balance")
+    print("2. Deposit Money")
+    print("3. Withdraw Money")
+    print("4. Exit")
+
+    choice = input("\nChoose an option (1-4): ")
+
+    if choice == "1":
+        check_balance()
+    elif choice == "2":
+        deposit()
+    elif choice == "3":
+        withdraw()
+    elif choice == "4":
+        print("Thank you for using the ATM.")
+        break
+    else:
+        print("Invalid choice! Please choose between 1 and 4.")
+
+
