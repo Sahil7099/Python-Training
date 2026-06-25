@@ -1,0 +1,115 @@
+import csv
+
+FILENAME = "library_books.csv"
+
+def add_book():
+    print("\n Add a New Book ")
+    title = input("Enter book title: ").strip()
+    author = input("Enter author name: ").strip()
+    year = input("Enter publication year: ").strip()
+    
+    if not title or not author:
+        print(" Title and Author cannot be empty.")
+        return
+
+    with open(FILENAME, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.writer(file)
+        writer.writerow([title, author, year])
+    
+    print(f" '{title}' added to the library successfully!")
+
+
+def search_book():
+    print("\n Search for a Book ")
+    query = input("Enter book title to search: ").strip().lower()
+    found = False
+
+    try:
+        with open(FILENAME, mode="r", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            for row in reader:
+               
+                if row and query in row[0].lower():
+                    print(f" Found! Title: {row[0]} | Author: {row[1]} | Year: {row[2]}")
+                    found = True
+            
+            if not found:
+                print(" No matching book found.")
+                
+    except FileNotFoundError:
+        print(" Error: Library file not found. Add a book first to create it.")
+
+
+def remove_book():
+    print("\n  Remove a Book ")
+    title_to_remove = input("Enter the exact title of the book to remove: ").strip().lower()
+    books_kept = []
+    found = False
+
+    try:
+     
+        with open(FILENAME, mode="r", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            for row in reader:
+                if row:
+                    if row[0].lower() == title_to_remove:
+                        found = True  
+                    else:
+                        books_kept.append(row)
+
+        if not found:
+            print(" Book not found in the library.")
+            return
+
+        
+        with open(FILENAME, mode="w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerows(books_kept)
+        
+        print(f" Successfully removed the book.")
+
+    except FileNotFoundError:
+        print(" Error: Library file not found. Nothing to remove.")
+
+
+def list_all_books():
+    print("Current Library Collection ")
+    try:
+        with open(FILENAME, mode="r", encoding="utf-8") as file:
+            reader = csv.reader(file)
+            has_books = False
+            for row in reader:
+                if row:
+                    print(f" {row[0]} by {row[1]} ({row[2]})")
+                    has_books = True
+            
+            if not has_books:
+                print("The library is currently empty.")
+                
+    except FileNotFoundError:
+        print(" Error: Library file not found. Add a book first.")
+
+
+while True:
+   
+    print("1. Add Book")
+    print("2. Search Book")
+    print("3. Remove Book")
+    print("4. List All Books")
+    print("5. Exit")
+    
+    choice = input("Choose an option (1-5): ").strip()
+    
+    if choice == "1":
+        add_book()
+    elif choice == "2":
+        search_book()
+    elif choice == "3":
+        remove_book()
+    elif choice == "4":
+        list_all_books()
+    elif choice == "5":
+        print("Exiting Library System. Goodbye!")
+        break
+    else:
+        print(" Invalid choice. Please enter a number between 1 and 5.")
